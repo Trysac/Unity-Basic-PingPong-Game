@@ -1,108 +1,83 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using RetroRally.Core;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
+/// <summary>
+/// The ball of the original scene. Bounce angles, speeds and the score come from the
+/// engine-free rules in RetroRally.Core; velocities are in units per second.
+/// </summary>
 public class Ball : MonoBehaviour
 {
     [SerializeField] Text scorePlayer1;
     [SerializeField] Text scorePlayer2;
-    [SerializeField] float moveSpeed = 1f;
-    [SerializeField] float speedAddedPerBounce = 1f;
     [SerializeField] float delayToStartGame = 2f;
+    [SerializeField] int pointsToWin = 5;
 
-    int socreP1 = 0;
-    int scoreP2 = 0;
-
-    float bounceCount = 0;
-    
-    bool gameOver = false;
-
-    float xDireccion = 1;
-    float yDirection = 1f;
-
-    Rigidbody2D myRigidbody2D;
+    MatchScore score;
+    int hits;
+    Rigidbody2D body;
 
     void Start()
     {
-        scorePlayer1.text = socreP1.ToString();
-        scorePlayer2.text = scoreP2.ToString();
-        myRigidbody2D = GetComponent<Rigidbody2D>();
-        StartCoroutine(Delay());
+        body = GetComponent<Rigidbody2D>();
+        score = new MatchScore(pointsToWin);
+        ShowScore();
+        StartCoroutine(Serve(Side.Right));
     }
-    private void Update()
+
+    void OnCollisionEnter2D(Collision2D collision)
     {
-
-        if (scorePlayer1.text.Equals("5")) 
+        if (collision.gameObject.CompareTag("LP1"))
         {
-            gameOver = true;
+            Concede(Side.Left);
         }
-        else if (scorePlayer2.text.Equals("5")) 
+        else if (collision.gameObject.CompareTag("LP2"))
         {
-            gameOver = true;
+            Concede(Side.Right);
         }
+        else if (collision.gameObject.CompareTag("Pallet"))
+        {
+            Return(collision);
+        }
+    }
 
-        if (gameOver) 
+    void Concede(Side side)
+    {
+        bool won = score.Award(side.Other());
+        ShowScore();
+        if (won)
         {
             SceneManager.LoadScene(2);
+            return;
         }
+        StopAllCoroutines();
+        StartCoroutine(Serve(side));
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void Return(Collision2D collision)
     {
-        if (collision.gameObject.tag.Equals("LP1")) 
-        {
-            scoreP2++;
-            scorePlayer2.text = scoreP2.ToString();
-            StartCoroutine(Delay());
-        }
-        else if (collision.gameObject.tag.Equals("LP2")) 
-        {
-            socreP1++;
-            scorePlayer1.text = socreP1.ToString();
-            StartCoroutine(Delay());
-        }
-        else if (collision.gameObject.tag.Equals("Pallet"))
-        {         
-            bounceCount++;
-            PalletBounce(collision);
-        }
+        Side side = collision.transform.position.x < 0f ? Side.Left : Side.Right;
+        hits++;
+        Vec2 velocity = BallPhysics.Rebound(side, collision.transform.position.y, collision.collider.bounds.extents.y,
+            transform.position.y, 0f, hits, out _);
+        body.linearVelocity = new Vector2(velocity.X, velocity.Y);
     }
 
-    private void PalletBounce(Collision2D collision) 
+    void ShowScore()
     {
-        Vector2 ballPosition = transform.position;
-        Vector2 palletPosition = collision.gameObject.transform.position;
-        float palletHight = collision.collider.bounds.size.y;
-        if (collision.gameObject.name.Equals("Pallet_Player_1")) 
-        {
-            xDireccion = 1f;
-        }
-        else 
-        {
-            xDireccion = -1f;
-        }
-        yDirection = (ballPosition.y - palletPosition.y) / palletHight;
-
-        Vector2 newDirection = new Vector2(xDireccion, yDirection);
-        MoveBall(newDirection);
-
+        scorePlayer1.text = score.Of(Side.Left).ToString();
+        scorePlayer2.text = score.Of(Side.Right).ToString();
     }
 
-    private void MoveBall(Vector2 direction) 
+    /// <summary>Waits, then serves from the centre towards <paramref name="towards"/>.</summary>
+    IEnumerator Serve(Side towards)
     {
-        Vector2 velocity = direction.normalized * ((moveSpeed + bounceCount * speedAddedPerBounce) * Time.deltaTime);
-        myRigidbody2D.linearVelocity = velocity;
+        transform.position = new Vector2(-1f, 0f);
+        hits = 0;
+        body.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(delayToStartGame);
+        body.linearVelocity = new Vector2(-towards.Facing() * Tuning.ServeSpeed, 0f);
     }
-
-    private IEnumerator Delay()
-    {
-        transform.position = new Vector2(-1, 0);
-        bounceCount = 0;
-        myRigidbody2D.linearVelocity = new Vector2(0, 0);
-       yield return new WaitForSeconds(delayToStartGame);
-        Vector2 inicialDirection = new Vector2(1,0);
-        MoveBall(inicialDirection);
-    } 
 }
