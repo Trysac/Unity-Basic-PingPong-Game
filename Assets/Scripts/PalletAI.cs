@@ -8,9 +8,9 @@ public class PalletAI : MonoBehaviour
 
     void Update()
     {
-        if (FindObjectOfType<Ball>()) 
+        if (FindFirstObjectByType<Ball>()) 
         {
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(transform.position.y, FindObjectOfType<Ball>().transform.position.y, moveSpeed * Time.deltaTime));
+            transform.position = new Vector2(transform.position.x, Mathf.Lerp(transform.position.y, FindFirstObjectByType<Ball>().transform.position.y, moveSpeed * Time.deltaTime));
         }      
         
         if (transform.position.y < -3 || transform.position.y > 3)

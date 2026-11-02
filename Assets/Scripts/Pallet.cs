@@ -16,7 +16,7 @@ public class Pallet : MonoBehaviour
 
     void Update()
     {
-        myRigidbody2D.velocity = new Vector2(0 , Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime);
+        myRigidbody2D.linearVelocity = new Vector2(0 , Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime);
         if (transform.position.y < -3 ||transform.position.y > 3) 
         {
             float clampPosition = Mathf.Clamp(transform.position.y, -3, 3);

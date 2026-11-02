@@ -93,14 +93,14 @@ public class Ball : MonoBehaviour
     private void MoveBall(Vector2 direction) 
     {
         Vector2 velocity = direction.normalized * ((moveSpeed + bounceCount * speedAddedPerBounce) * Time.deltaTime);
-        myRigidbody2D.velocity = velocity;
+        myRigidbody2D.linearVelocity = velocity;
     }
 
     private IEnumerator Delay()
     {
         transform.position = new Vector2(-1, 0);
         bounceCount = 0;
-        myRigidbody2D.velocity = new Vector2(0, 0);
+        myRigidbody2D.linearVelocity = new Vector2(0, 0);
        yield return new WaitForSeconds(delayToStartGame);
         Vector2 inicialDirection = new Vector2(1,0);
         MoveBall(inicialDirection);
