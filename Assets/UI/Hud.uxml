@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="root" class="hud" picking-mode="Ignore">
+        <ui:VisualElement name="play-hud" class="layer" picking-mode="Ignore">
+            <ui:VisualElement class="top-band" picking-mode="Ignore">
+                <ui:Label name="name-left" class="player-name player-name--left" text="PLAYER 1" picking-mode="Ignore" />
+                <ui:Label name="target" class="target" text="FIRST TO 5" picking-mode="Ignore" />
+                <ui:Label name="name-right" class="player-name player-name--right" text="CPU" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="scores" picking-mode="Ignore">
+                <ui:Label name="score-left" class="display score score--left" text="0" picking-mode="Ignore" />
+                <ui:Label name="score-right" class="display score score--right" text="0" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="effects-left" class="effects effects--left" picking-mode="Ignore" />
+            <ui:VisualElement name="effects-right" class="effects effects--right" picking-mode="Ignore" />
+            <ui:Label name="prompt" class="prompt" text="PRESS SPACE TO SERVE" picking-mode="Ignore" />
+            <ui:VisualElement name="floaters" class="layer" picking-mode="Ignore" />
+            <ui:Label name="banner" class="display banner" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="menu" class="layer menu" picking-mode="Ignore">
+            <ui:VisualElement name="menu-dim" class="layer menu__dim" picking-mode="Ignore" />
+            <ui:VisualElement class="menu__column" picking-mode="Ignore">
+                <ui:VisualElement name="logo" class="logo" picking-mode="Ignore">
+                    <ui:Label class="display logo__word logo__word--retro" text="RETRO" picking-mode="Ignore" />
+                    <ui:Label class="display logo__word logo__word--rally" text="RALLY" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Label name="menu-title" class="display menu__title" picking-mode="Ignore" />
+                <ui:Label name="menu-subtitle" class="menu__subtitle" picking-mode="Ignore" />
+                <ui:VisualElement name="menu-body" class="menu__body" picking-mode="Ignore" />
+                <ui:VisualElement name="menu-items" class="menu__items" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="menu-hint" class="menu__hint" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:Label name="sound" class="sound" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

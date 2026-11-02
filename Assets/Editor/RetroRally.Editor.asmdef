@@ -1,0 +1,19 @@
+{
+    "name": "RetroRally.Editor",
+    "rootNamespace": "RetroRally.EditorTools",
+    "references": [
+        "RetroRally.Core",
+        "RetroRally.Game"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

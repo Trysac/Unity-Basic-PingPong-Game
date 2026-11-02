@@ -1,0 +1,342 @@
+/*
+ * Retro Rally HUD: neon cyan and magenta on deep navy. The Retro pixel font is the display
+ * face (logo, titles, banners, scores); small text uses the default font, which reads better.
+ * Designed at 1280x720 reference pixels; the panel settings scale it to the screen.
+ */
+
+:root {
+    --cyan: #38e8ff;
+    --magenta: #ff4f9a;
+    --text: #e9ecff;
+    --muted: #8a93c2;
+    --gold: #ffe066;
+    --panel: rgba(10, 13, 28, 0.92);
+
+    color: var(--text);
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+.display {
+    -unity-font-definition: url("RetroFont.asset");
+    -unity-font-style: normal;
+}
+
+.hud,
+.layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ---- Match HUD ---- */
+
+.top-band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 44px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 36px;
+    padding-right: 36px;
+}
+
+.player-name {
+    width: 420px;
+    font-size: 20px;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.player-name--left {
+    color: var(--cyan);
+}
+
+.player-name--right {
+    color: var(--magenta);
+    -unity-text-align: middle-right;
+}
+
+.target {
+    flex-grow: 1;
+    font-size: 18px;
+    color: var(--muted);
+    -unity-text-align: middle-center;
+}
+
+.scores {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.score {
+    width: 220px;
+    height: 120px;
+    font-size: 110px;
+    -unity-text-align: middle-center;
+    opacity: 0.42;
+    margin-left: 40px;
+    margin-right: 40px;
+    transition-property: scale, opacity;
+    transition-duration: 0.18s;
+}
+
+.score--left {
+    color: var(--cyan);
+}
+
+.score--right {
+    color: var(--magenta);
+}
+
+.score--pop {
+    scale: 1.35 1.35;
+    opacity: 1;
+}
+
+.effects {
+    position: absolute;
+    top: 192px;
+    width: 300px;
+    align-items: center;
+}
+
+/* Under each score, away from the paddles. */
+.effects--left {
+    left: 340px;
+}
+
+.effects--right {
+    right: 340px;
+}
+
+.chip {
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 6px;
+    border-width: 2px;
+    border-radius: 6px;
+    background-color: rgba(10, 13, 28, 0.75);
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.prompt {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 64px;
+    font-size: 22px;
+    color: var(--text);
+    -unity-text-align: middle-center;
+    opacity: 0.9;
+}
+
+.banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 300px;
+    height: 120px;
+    font-size: 72px;
+    color: var(--gold);
+    -unity-text-align: middle-center;
+    text-shadow: 0 4px 0 rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    scale: 0.7 0.7;
+    transition-property: opacity, scale;
+    transition-duration: 0.16s;
+    white-space: nowrap;
+}
+
+.banner--show {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.banner--left {
+    color: var(--cyan);
+}
+
+.banner--right {
+    color: var(--magenta);
+}
+
+.floater {
+    position: absolute;
+    font-size: 22px;
+    translate: -50% -50%;
+    white-space: nowrap;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* ---- Menus ---- */
+
+.menu {
+    align-items: center;
+    justify-content: center;
+}
+
+.menu__dim {
+    background-color: rgba(6, 8, 18, 0.74);
+}
+
+.menu__dim--light {
+    background-color: rgba(6, 8, 18, 0.38);
+}
+
+.menu__column {
+    width: 960px;
+    align-items: center;
+}
+
+.logo {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.logo__word {
+    font-size: 96px;
+    margin-left: 14px;
+    margin-right: 14px;
+    text-shadow: 0 6px 0 rgba(0, 0, 0, 0.55);
+}
+
+.logo__word--retro {
+    color: var(--cyan);
+}
+
+.logo__word--rally {
+    color: var(--magenta);
+}
+
+.menu__title {
+    font-size: 56px;
+    margin-bottom: 10px;
+    color: var(--gold);
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    text-shadow: 0 4px 0 rgba(0, 0, 0, 0.6);
+}
+
+.menu__title--left {
+    color: var(--cyan);
+}
+
+.menu__title--right {
+    color: var(--magenta);
+}
+
+.menu__subtitle {
+    font-size: 22px;
+    color: var(--muted);
+    margin-top: 2px;
+    margin-bottom: 18px;
+    -unity-text-align: middle-center;
+}
+
+.menu__body {
+    width: 520px;
+    margin-bottom: 16px;
+}
+
+.body-line {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 36px;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-color: rgba(138, 147, 194, 0.25);
+    font-size: 18px;
+}
+
+.body-line__label {
+    color: var(--muted);
+}
+
+.body-line__value {
+    color: var(--text);
+    -unity-text-align: middle-right;
+}
+
+.body-line__value--new {
+    color: var(--gold);
+}
+
+.menu__items {
+    width: 520px;
+}
+
+.item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 46px;
+    margin: 4px 0;
+    padding: 0 18px;
+    border-width: 2px;
+    border-radius: 8px;
+    border-color: rgba(58, 74, 140, 0.8);
+    background-color: rgba(10, 13, 28, 0.82);
+    font-size: 22px;
+    color: var(--text);
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.08s;
+}
+
+.item:hover {
+    border-color: rgba(56, 232, 255, 0.6);
+}
+
+.item--selected {
+    border-color: var(--cyan);
+    background-color: rgba(56, 232, 255, 0.16);
+    scale: 1.03 1.03;
+}
+
+.item__label {
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.item__value {
+    color: var(--gold);
+    -unity-text-align: middle-right;
+    white-space: nowrap;
+}
+
+.menu__hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    font-size: 15px;
+    color: var(--muted);
+    -unity-text-align: middle-center;
+}
+
+.sound {
+    position: absolute;
+    right: 18px;
+    bottom: 8px;
+    font-size: 14px;
+    color: var(--muted);
+}
