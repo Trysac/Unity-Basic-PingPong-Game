@@ -4,7 +4,6 @@ Usage (from the repository root, needs ffmpeg on PATH):
     python tools/audio/build.py
 """
 
-import os
 import pathlib
 import subprocess
 import sys

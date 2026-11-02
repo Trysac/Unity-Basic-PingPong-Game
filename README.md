@@ -47,7 +47,7 @@ opt-in hook: run a built player with `-screenshot <folder>` (optionally
 
 | Action | Player 1 | Player 2 (two-player mode) |
 |---|---|---|
-| Move the paddle | W / S (against the CPU also ↑ / ↓), or the first gamepad's left stick or d-pad | ↑ / ↓, or the second gamepad |
+| Move the paddle | W / S (against the CPU also ↑ / ↓), or the last-used gamepad's left stick or d-pad (in 2P, the first gamepad) | ↑ / ↓, or the second gamepad |
 | Serve (move while serving to angle it) | Space (against the CPU also Enter), or A | Enter, or A on the second gamepad |
 | Pause | Esc or P, or Start | Esc or P, or Start |
 | Menus | ↑ / ↓ to choose, ← / → to change a setting, Enter or Space to select, Esc to go back; the mouse and the d-pad work too | |
