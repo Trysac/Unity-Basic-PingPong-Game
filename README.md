@@ -12,6 +12,16 @@ mode with power-ups.
 | ![Settings: CPU level, match length, mode, volume and screen shake](docs/screenshots/settings.png) | ![Pause menu over a frozen rally](docs/screenshots/pause.png) |
 | ![Results with the longest rally, win streak and record against the CPU](docs/screenshots/gameover.png) | |
 
+## Play it
+
+- **In your browser:** [trysac.github.io/Unity-Basic-PingPong-Game](https://trysac.github.io/Unity-Basic-PingPong-Game/)
+- **On itch.io:** [trysac.itch.io/retro-rally](https://trysac.itch.io/retro-rally)
+- **Get the code:** fork this repository, or clone it:
+
+  ```bash
+  git clone https://github.com/Trysac/Unity-Basic-PingPong-Game.git
+  ```
+
 ## Run it
 
 1. Install **Unity 6000.3.27f1 (Unity 6 LTS)** with Unity Hub (add the Windows or Web build
