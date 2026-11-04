@@ -4,6 +4,8 @@ A neon arcade take on table tennis built with Unity: play a beatable CPU on thre
 levels or a friend on the same keyboard, first to 3, 5, 7 or 11, in Classic mode or in Arcade
 mode with power-ups.
 
+![Gameplay](docs/media/gameplay.gif)
+
 ![A rally against the CPU with the ball trail in the hitter's colour](docs/screenshots/rally.png)
 
 | | |
