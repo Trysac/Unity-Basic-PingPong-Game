@@ -13,6 +13,8 @@ namespace RetroRally.Game
     /// (which have no command line) are unaffected. The same hook runs inside the editor
     /// (ProjectBuilder.CaptureScreenshots), which renders the camera and the HUD off screen and
     /// blends them, for machines that cannot run the player.
+    /// Adding <c>-frames N [-fps F]</c> saves N numbered frames per scenario at a fixed timestep
+    /// of 1/F seconds instead of one still (the README gameplay GIF uses <c>-scenario gameplay</c>).
     /// </summary>
     public sealed class ScreenshotScenarios : MonoBehaviour
     {
@@ -22,6 +24,8 @@ namespace RetroRally.Game
 
         string folder;
         string[] scenarios;
+        int frames;
+        int fps = 15;
         RenderTexture sceneTarget;
         RenderTexture uiTarget;
         GameDirector director;
@@ -37,6 +41,11 @@ namespace RetroRally.Game
             var host = new GameObject(nameof(ScreenshotScenarios)).AddComponent<ScreenshotScenarios>();
             host.folder = target;
             host.scenarios = (Argument("-scenario") ?? DefaultScenarios).Split(',');
+            int.TryParse(Argument("-frames"), out host.frames);
+            if (int.TryParse(Argument("-fps"), out int fps) && fps > 0)
+            {
+                host.fps = fps;
+            }
         }
 
         IEnumerator Start()
@@ -54,6 +63,12 @@ namespace RetroRally.Game
                 string scenario = raw.Trim();
                 director.Seed(StableSeed(scenario));
                 yield return Stage(scenario);
+                if (frames > 0)
+                {
+                    yield return CaptureSequence(scenario);
+                    director.ScriptedInput = false;
+                    continue;
+                }
                 Texture2D shot;
                 if (Application.isEditor)
                 {
@@ -118,6 +133,14 @@ namespace RetroRally.Game
                     yield return Rally(0.4f);
                     director.Sim.SpawnPickup(PowerUpKind.Shrink, new Vec2(-1.8f, -2.2f));
                     yield return Rally(0.2f);
+                    break;
+                case "gameplay":
+                    director.Settings.Mode = GameMode.Arcade;
+                    director.Settings.PointsToWin = 11;
+                    yield return Play(Opponent.Cpu);
+                    Award(Side.Left, 3);
+                    Award(Side.Right, 3);
+                    yield return Rally(1.2f);
                     break;
                 case "pause":
                     yield return Play(Opponent.Cpu);
@@ -198,6 +221,48 @@ namespace RetroRally.Game
                 }
             }
             return Mathf.Clamp((target - paddle.Y) / 0.3f, -1f, 1f);
+        }
+
+        /// <summary>
+        /// Keeps the rally going (autopilot on the left, the CPU on the right) and saves one frame
+        /// every 1/fps seconds of game time, whatever the real frame rate is.
+        /// </summary>
+        IEnumerator CaptureSequence(string scenario)
+        {
+            Time.captureFramerate = fps;
+            for (int i = 0; i < frames; i++)
+            {
+                MatchSim sim = director.Sim;
+                director.ScriptedLeft = Steer(sim, sim.Left);
+                director.ScriptedRight = Steer(sim, sim.Right);
+                if (sim.Phase == RallyPhase.Serving && sim.PhaseTime > 0.5f)
+                {
+                    sim.ServeNow();
+                }
+                if (scenario == "gameplay" && (i == fps / 2 || i == fps * 2) && sim.Balls.Count > 0)
+                {
+                    Ball ball = sim.Balls[0];
+                    sim.SpawnPickup(i == fps / 2 ? PowerUpKind.MultiBall : PowerUpKind.Grow,
+                        ball.Position + ball.Velocity * 0.12f);
+                }
+                Texture2D shot;
+                if (Application.isEditor)
+                {
+                    yield return null;
+                    shot = CaptureOffscreen();
+                }
+                else
+                {
+                    yield return new WaitForEndOfFrame();
+                    shot = ScreenCapture.CaptureScreenshotAsTexture();
+                }
+                File.WriteAllBytes(Path.Combine(folder, $"{scenario}_{i:D4}.png"), shot.EncodeToPNG());
+                Destroy(shot);
+            }
+            Time.captureFramerate = 0;
+            director.ScriptedLeft = 0f;
+            director.ScriptedRight = 0f;
+            Debug.Log($"Saved {frames} frames of {scenario} at {fps} fps");
         }
 
         /// <summary>Points the camera and the HUD panel at render textures of a fixed size.</summary>
